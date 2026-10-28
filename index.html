@@ -1290,7 +1290,7 @@ function sampleAt(mesh, sol, loc, x, y) {
   const A = sol.A[i] * h.l0 + sol.A[j] * h.l1 + sol.A[k] * h.l2;
   const bx = sol.nbx[i] * h.l0 + sol.nbx[j] * h.l1 + sol.nbx[k] * h.l2;
   const by = sol.nby[i] * h.l0 + sol.nby[j] * h.l1 + sol.nby[k] * h.l2;
-  return { A, bx, by, bm: sol.harmonic ? sol.nbm[i] * h.l0 + sol.nbm[j] * h.l1 + sol.nbm[k] * h.l2 : Math.hypot(bx, by), ex: sol.bx[e], ey: sol.by[e], bElem: sol.bm[e], nu: sol.nu[e], reg: mesh.reg[e], e };
+  return { A, bx, by, bm: sol.bm[e], ex: sol.bx[e], ey: sol.by[e], bElem: sol.bm[e], nu: sol.nu[e], reg: mesh.reg[e], e };
 }
 
 function isolines(mesh, A, nLev) {
@@ -1772,7 +1772,7 @@ function buildField() {
   R.colors = []; for (let b = 0; b < NB; b++) R.colors.push(rampColor((b + 0.5) / NB));
   const buckets = []; for (let b = 0; b < NB; b++) buckets.push([]);
   for (let e = 0; e < m; e++) {
-    const v = useJ ? values[e] : (S.nbm[M.tri[3 * e]] + S.nbm[M.tri[3 * e + 1]] + S.nbm[M.tri[3 * e + 2]]) / 3;
+    const v = values[e];
     buckets[Math.min(NB - 1, Math.floor(clamp(v / R.scale, 0, 0.9999) * NB))].push(e);
   }
   R.buckets = buckets.map(a => Int32Array.from(a));
